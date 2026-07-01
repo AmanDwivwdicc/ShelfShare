@@ -1,9 +1,35 @@
 import { Router } from "express";
-import { createRequest } from "../controllers/requestController.js";
+import { 
+    createRequest,
+    getReceivedRequests,
+    updateRequestStatus
+} from "../controllers/requestController.js";
+
 import { protect } from "../middleware/authMiddleware.js";
+
 
 const router = Router();
 
-router.post("/", protect, createRequest);
+
+router.post(
+    "/",
+    protect,
+    createRequest
+);
+
+
+router.get(
+    "/received",
+    protect,
+    getReceivedRequests
+);
+
+
+router.patch(
+    "/:id/status",
+    protect,
+    updateRequestStatus
+);
+
 
 export default router;

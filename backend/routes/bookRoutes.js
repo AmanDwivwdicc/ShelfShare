@@ -4,6 +4,8 @@ import {
   getBooks,
   getBookById,
   createBook,
+  getMyBooks,
+  deleteBook,
 } from "../controllers/bookController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { uploadBookImage } from "../middleware/uploadMiddleware.js";
@@ -37,7 +39,13 @@ const handleImageUpload = (req, res, next) => {
 };
 
 router.get("/", protect, getBooks);
+
+router.get("/my-books", protect, getMyBooks);
+
 router.get("/:id", protect, getBookById);
+
 router.post("/", protect, handleImageUpload, createBook);
+
+router.delete("/:id", protect, deleteBook);
 
 export default router;

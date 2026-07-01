@@ -7,20 +7,45 @@ import { useBooks } from "../context/BooksContext";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const { books, loading, error, fetchBooks } = useBooks();
+  const {
+    books,
+    myBooks,
+    loading,
+    error,
+    fetchBooks,
+    fetchMyBooks
+    } = useBooks();
 
-  useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks]);
+    useEffect(() => {
+
+      fetchBooks();
+      
+      fetchMyBooks();
+      
+      }, [fetchBooks]);
 
   return (
     <div className="min-h-screen bg-cream">
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="font-serif text-3xl font-bold text-ink">
-              Welcome back, {user?.name}! 👋
-            </h1>
+          <Link to="/my-listings">
+
+<h1
+className="
+font-serif
+text-3xl
+font-bold
+text-ink
+cursor-pointer
+transition
+hover:text-leather
+"
+>
+Welcome back, {user?.name}! 👋
+</h1>
+
+</Link>
             <p className="mt-2 text-ink-light">
               Browse affordable books to buy, sell, or exchange
             </p>

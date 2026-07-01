@@ -157,3 +157,89 @@ export const createBook = async (req, res) => {
     });
   }
 };
+export const getMyBooks = async (req, res) => {
+  try {
+
+    const books = await Book.find({
+      owner: req.user._id
+    })
+    .populate("owner", "name email")
+    .sort({ createdAt: -1 });
+
+
+    res.status(200).json({
+      success:true,
+      count:books.length,
+      books:books.map(formatBook)
+    });
+
+
+  } catch(error){
+
+    console.error("Get my books error:", error.message);
+
+    res.status(500).json({
+      success:false,
+      message:"Failed to fetch your listings"
+    });
+
+  }
+};
+export const deleteBook = async(req,res)=>{
+
+  try{
+  
+  const book = await Book.findById(req.params.id);
+  
+  
+  if(!book){
+  
+  return res.status(404).json({
+  success:false,
+  message:"Book not found"
+  });
+  
+  }
+  
+  
+  
+  if(book.owner.toString() !== req.user._id.toString()){
+  
+  return res.status(403).json({
+  success:false,
+  message:"You cannot delete this book"
+  });
+  
+  }
+  
+  
+  
+  await Book.findByIdAndDelete(req.params.id);
+  
+  
+  
+  res.status(200).json({
+  
+  success:true,
+  message:"Book removed successfully"
+  
+  });
+  
+  
+  }
+  catch(error){
+  
+  console.error("Delete book error:",error.message);
+  
+  
+  res.status(500).json({
+  
+  success:false,
+  message:"Failed to delete book"
+  
+  });
+  
+  
+  }
+  
+  };

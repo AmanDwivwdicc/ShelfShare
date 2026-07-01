@@ -30,28 +30,66 @@ export default function Navbar({ variant = "default" }) {
         </Link>
 
         <div className="flex items-center gap-3 sm:gap-4">
-          {isAuthenticated ? (
-            <>
-              <Link
-                to="/dashboard"
-                className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
-              >
-                Dashboard
-              </Link>
-              <Link
-                to="/add-book"
-                className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
-              >
-                Add Book
-              </Link>
-              <span className="hidden text-sm text-ink-light md:block">
-                Hi, {user?.name}
-              </span>
-              <Button variant="outline" size="sm" onClick={handleLogout}>
-                Logout
-              </Button>
-            </>
-          ) : (
+        {isAuthenticated ? (
+  <>
+    <Link
+      to="/dashboard"
+      className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
+    >
+      Dashboard
+    </Link>
+
+
+    <Link
+      to="/add-book"
+      className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
+    >
+      Add Book
+    </Link>
+
+
+    <Link
+      to="/notifications"
+      className="
+      text-xl
+      hover:scale-110
+      transition
+      "
+    >
+      🔔
+    </Link>
+
+
+    <Link
+      to="/my-listings"
+      className="
+      hidden
+      text-sm
+      font-medium
+      text-ink-light
+      hover:text-leather
+      sm:block
+      "
+    >
+      My Listings
+    </Link>
+
+
+    <span className="hidden text-sm text-ink-light md:block">
+      Hi, {user?.name}
+    </span>
+
+
+    <Button 
+      variant="outline" 
+      size="sm" 
+      onClick={handleLogout}
+    >
+      Logout
+    </Button>
+
+  </>
+): (
             <>
               <Link to="/login">
                 <Button variant="secondary" size="sm">

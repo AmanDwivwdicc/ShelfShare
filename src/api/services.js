@@ -7,13 +7,32 @@ export const authAPI = {
 
 export const booksAPI = {
   getAll: () => api.get("/books"),
+
   getById: (id) => api.get(`/books/${id}`),
+
   create: (formData) =>
     api.post("/books", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     }),
+
+  getMyBooks: () => api.get("/books/my-books"),
+
+  delete: (id) => api.delete(`/books/${id}`),
 };
 
 export const requestsAPI = {
-  create: (bookId) => api.post("/requests", { bookId }),
+
+  create: (bookId) =>
+    api.post("/requests", { bookId }),
+
+
+  getReceived: () =>
+    api.get("/requests/received"),
+
+
+  updateStatus:(id,status)=>
+    api.patch(`/requests/${id}/status`,{
+      status
+    })
+
 };

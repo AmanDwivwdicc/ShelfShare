@@ -2,7 +2,13 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import { getBookImageUrl, formatPrice } from "../utils/bookImage";
 
-export default function BookCard({ book }) {
+import { useBooks } from "../context/BooksContext";
+
+
+export default function BookCard({ book, showDelete=false }) {
+
+
+const { deleteBook } = useBooks();
   const isExchange = book.type === "exchange";
   const coverUrl = getBookImageUrl(book);
 
@@ -53,11 +59,49 @@ export default function BookCard({ book }) {
         )}
 
         <div className="mt-auto pt-4">
-          <Link to={`/book/${book.id}`}>
-            <Button variant="outline" size="sm" className="w-full">
-              View Details
-            </Button>
-          </Link>
+        {
+showDelete ? (
+
+<Button
+
+variant="outline"
+
+size="sm"
+
+className="w-full"
+
+onClick={()=>deleteBook(book.id)}
+
+>
+
+Remove Listing
+
+</Button>
+
+
+)
+
+:
+
+(
+
+<Link to={`/book/${book.id}`}>
+
+<Button 
+variant="outline"
+size="sm"
+className="w-full"
+>
+
+View Details
+
+</Button>
+
+</Link>
+
+)
+
+}
         </div>
       </div>
     </article>
