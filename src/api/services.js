@@ -36,3 +36,23 @@ export const requestsAPI = {
     })
 
 };
+
+export const chatAPI = {
+
+  getMessages:(conversationId)=>
+    api.get(`/chat/${conversationId}`),
+
+
+  sendMessage:(conversationId,text)=>
+    api.post(`/chat/${conversationId}`,{
+      text
+    })
+
+};
+
+export const conversationAPI = {
+
+  getMyConversations:()=> 
+  api.get("/conversations")
+  
+  };

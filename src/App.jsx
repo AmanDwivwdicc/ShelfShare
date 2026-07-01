@@ -14,6 +14,8 @@ import AddBookPage from "./pages/AddBookPage";
 import BookDetailsPage from "./pages/BookDetailsPage";
 import MyListingsPage from "./pages/MyListingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
+import ChatPage from "./pages/ChatPage";
+import ChatsPage from "./pages/ChatsPage";
 
 export default function App() {
 
@@ -71,6 +73,14 @@ export default function App() {
 <Route
  path="/notifications"
  element={<NotificationsPage />}
+/>
+<Route
+ path="/chat/:id"
+ element={<ChatPage/>}
+/>
+<Route
+path="/chats"
+element={<ChatsPage/>}
 />
 
               </Route>

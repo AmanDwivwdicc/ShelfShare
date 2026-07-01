@@ -74,6 +74,13 @@ export default function Navbar({ variant = "default" }) {
       My Listings
     </Link>
 
+    <Link
+  to="/chats"
+  className="text-xl hover:scale-110 transition"
+>
+  💬
+</Link>
+
 
     <span className="hidden text-sm text-ink-light md:block">
       Hi, {user?.name}

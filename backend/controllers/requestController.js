@@ -1,8 +1,9 @@
 import Book from "../models/Book.js";
 import Request from "../models/Request.js";
+import Conversation from "../models/Conversation.js";
 
 
-// CREATE REQUEST (User requests a book)
+// CREATE REQUEST
 export const createRequest = async (req, res) => {
   try {
 
@@ -11,8 +12,8 @@ export const createRequest = async (req, res) => {
 
     if (!bookId) {
       return res.status(400).json({
-        success: false,
-        message: "Book ID is required",
+        success:false,
+        message:"Book ID is required"
       });
     }
 
@@ -20,52 +21,63 @@ export const createRequest = async (req, res) => {
     const book = await Book.findById(bookId);
 
 
-    if (!book) {
+    if(!book){
       return res.status(404).json({
-        success: false,
-        message: "Book not found",
+        success:false,
+        message:"Book not found"
       });
     }
 
 
-    if (book.status !== "available") {
+    if(book.status !== "available"){
       return res.status(400).json({
-        success: false,
-        message: "This book is no longer available",
+        success:false,
+        message:"This book is no longer available"
       });
     }
 
 
-    if (book.owner.toString() === req.user._id.toString()) {
+    if(book.owner.toString() === req.user._id.toString()){
+
       return res.status(400).json({
-        success: false,
-        message: "You cannot request your own book",
+        success:false,
+        message:"You cannot request your own book"
       });
+
     }
+
 
 
     const existingRequest = await Request.findOne({
-      book: bookId,
-      requester: req.user._id,
-      status: "pending",
+
+      book:bookId,
+      requester:req.user._id,
+      status:"pending"
+
     });
 
 
-    if (existingRequest) {
+
+    if(existingRequest){
+
       return res.status(400).json({
-        success: false,
-        message: "You already have a pending request for this book",
+
+        success:false,
+        message:"You already have a pending request"
+
       });
+
     }
+
 
 
 
     const request = await Request.create({
 
-      book: bookId,
-      requester: req.user._id,
-      owner: book.owner,
-      status: "pending",
+      book:bookId,
+      requester:req.user._id,
+      owner:book.owner,
+      status:"pending"
 
     });
 
@@ -95,9 +107,7 @@ export const createRequest = async (req, res) => {
     res.status(201).json({
 
       success:true,
-
       message:"Request sent successfully",
-
       request
 
     });
@@ -106,101 +116,88 @@ export const createRequest = async (req, res) => {
 
   } catch(error){
 
-
-    if(error.name === "CastError"){
-
-      return res.status(404).json({
-
-        success:false,
-        message:"Book not found"
-
-      });
-
-    }
-
-
-
-    console.error(
-      "Create request error:",
-      error.message
-    );
-
+    console.log(error);
 
     res.status(500).json({
 
       success:false,
-      message:"Failed to create request"
+      message:"Failed creating request"
 
     });
 
-
   }
+
 };
 
 
 
 
 
-// GET REQUESTS RECEIVED BY BOOK OWNER
-export const getReceivedRequests = async (req,res)=>{
+// GET RECEIVED REQUESTS
 
-  try{
+export const getReceivedRequests = async(req,res)=>{
 
-    const requests = await Request.find({
-
-      owner:req.user._id,
-      status:"pending"
-
-    })
-
-    .populate({
-      path:"book",
-      select:"title author image"
-    })
-
-    .populate(
-      "requester",
-      "name email"
-    )
-
-    .sort({
-      createdAt:-1
-    });
+try{
 
 
-    // remove requests whose book was deleted
-    const validRequests = requests.filter(
-      request => request.book !== null
-    );
+const requests = await Request.find({
+
+owner:req.user._id,
+status:"pending"
+
+})
+
+.populate(
+"book",
+"title author image"
+)
+
+.populate(
+"requester",
+"name email"
+)
+
+.sort({
+createdAt:-1
+});
 
 
-    res.json({
 
-      success:true,
-      requests:validRequests
-
-    });
-
-
-  }
-  catch(error){
-
-    console.error(
-      "Get requests error:",
-      error.message
-    );
+const validRequests =
+requests.filter(
+request=>request.book !== null
+);
 
 
-    res.status(500).json({
 
-      success:false,
-      message:"Failed to fetch requests"
+res.json({
 
-    });
+success:true,
+requests:validRequests
 
-  }
+});
+
+
+
+}
+catch(error){
+
+console.log(error);
+
+
+res.status(500).json({
+
+success:false,
+message:"Failed fetching requests"
+
+});
+
+
+}
+
 
 };
+
 
 
 
@@ -208,111 +205,165 @@ export const getReceivedRequests = async (req,res)=>{
 
 
 // ACCEPT / REJECT REQUEST
+
 export const updateRequestStatus = async(req,res)=>{
 
 
-  try{
+try{
 
 
-    const {status}=req.body;
-
-
-
-    if(!["accepted","rejected"].includes(status)){
-
-
-      return res.status(400).json({
-
-        success:false,
-        message:"Invalid status"
-
-      });
-
-
-    }
+const {status}=req.body;
 
 
 
-    const request = await Request.findById(
-      req.params.id
-    );
+if(!["accepted","rejected"].includes(status)){
+
+
+return res.status(400).json({
+
+success:false,
+message:"Invalid status"
+
+});
+
+
+}
 
 
 
-    if(!request){
+const request =
+await Request.findById(req.params.id);
 
 
-      return res.status(404).json({
 
-        success:false,
-        message:"Request not found"
+if(!request){
 
-      });
+return res.status(404).json({
 
+success:false,
+message:"Request not found"
 
-    }
+});
+
+}
 
 
 
 
-    // only owner can accept/reject
-    if(
-      request.owner.toString()
-      !==
-      req.user._id.toString()
+// only owner can decide
 
-    ){
-
-
-      return res.status(403).json({
-
-        success:false,
-        message:"Not authorized"
-
-      });
+if(
+request.owner.toString()
+!==
+req.user._id.toString()
+){
 
 
-    }
+return res.status(403).json({
+
+success:false,
+message:"Not authorized"
+
+});
 
 
-
-    request.status=status;
-
-
-    await request.save();
+}
 
 
 
 
-    res.json({
+request.status=status;
 
-      success:true,
-
-      message:`Request ${status}`,
-
-      request
-
-    });
+await request.save();
 
 
 
-  }catch(error){
+let conversation = null;
 
 
-    console.error(
-      "Update request error:",
-      error.message
-    );
+
+// create ONE chat between two users
+
+if(status==="accepted"){
 
 
-    res.status(500).json({
-
-      success:false,
-      message:"Failed updating request"
-
-    });
-
-
+  const users = [
+  request.owner.toString(),
+  request.requester.toString()
+  ].sort();
+  
+  
+  
+  conversation =
+  await Conversation.findOne({
+  
+  users:{
+  $all:users,
+  $size:2
   }
+  
+  });
+  
+  
+  
+  if(!conversation){
+  
+  
+  conversation =
+  await Conversation.create({
+  
+  users
+  
+  });
+  
+  
+  }
+  
+  
+  
+  }
+
+
+
+
+res.json({
+
+success:true,
+
+message:`Request ${status}`,
+
+request,
+
+conversationId:
+conversation
+?
+conversation._id.toString()
+:
+null
+
+
+});
+
+
+
+
+}
+catch(error){
+
+
+console.log("Update error:",error);
+
+
+res.status(500).json({
+
+success:false,
+
+message:"Failed updating request"
+
+});
+
+
+}
+
 
 };

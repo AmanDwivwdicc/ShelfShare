@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { requestsAPI } from "../api/services";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
 
 export default function NotificationsPage(){
 
+  const navigate = useNavigate();
   const [requests,setRequests] = useState([]);
   const [loading,setLoading] = useState(true);
 
@@ -44,11 +46,27 @@ export default function NotificationsPage(){
 
   const updateStatus = async(id,status)=>{
 
-    await requestsAPI.updateStatus(id,status);
+    const {data}=await requestsAPI.updateStatus(
+        id,
+        status
+    );
+
+
+    if(
+      status==="accepted" &&
+      data.conversationId
+    ){
+
+      window.location.href =
+`/chat/${data.conversationId}`;
+      return;
+
+    }
+
 
     fetchRequests();
 
-  };
+};
 
 
 
