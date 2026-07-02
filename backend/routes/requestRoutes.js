@@ -2,7 +2,8 @@ import { Router } from "express";
 import { 
     createRequest,
     getReceivedRequests,
-    updateRequestStatus
+    updateRequestStatus,
+    getPendingCount
 } from "../controllers/requestController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -24,6 +25,11 @@ router.get(
     getReceivedRequests
 );
 
+router.get(
+    "/count",
+    protect,
+    getPendingCount
+  );
 
 router.patch(
     "/:id/status",

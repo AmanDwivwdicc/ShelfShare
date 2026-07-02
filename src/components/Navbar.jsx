@@ -2,7 +2,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Button from "./Button";
 
-export default function Navbar({ variant = "default" }) {
+export default function Navbar({
+  variant = "default",
+  notificationCount = 0,
+}) {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -30,79 +33,87 @@ export default function Navbar({ variant = "default" }) {
         </Link>
 
         <div className="flex items-center gap-3 sm:gap-4">
-        {isAuthenticated ? (
-  <>
-    <Link
-      to="/dashboard"
-      className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
-    >
-      Dashboard
-    </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
+              >
+                Dashboard
+              </Link>
 
+              <Link
+                to="/add-book"
+                className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
+              >
+                Add Book
+              </Link>
 
-    <Link
-      to="/add-book"
-      className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
-    >
-      Add Book
-    </Link>
+              {/* Notifications */}
+              <Link
+                to="/notifications"
+                className="relative text-xl hover:scale-110 transition"
+              >
+                🔔
 
+                {notificationCount > 0 && (
+                  <span
+                    className="
+                    absolute
+                    -top-2
+                    -right-2
+                    bg-red-500
+                    text-white
+                    rounded-full
+                    min-w-[18px]
+                    h-[18px]
+                    px-1
+                    flex
+                    items-center
+                    justify-center
+                    text-[10px]
+                    font-bold
+                    "
+                  >
+                    {notificationCount > 9 ? "9+" : notificationCount}
+                  </span>
+                )}
+              </Link>
 
-    <Link
-      to="/notifications"
-      className="
-      text-xl
-      hover:scale-110
-      transition
-      "
-    >
-      🔔
-    </Link>
+              <Link
+                to="/my-listings"
+                className="hidden text-sm font-medium text-ink-light hover:text-leather sm:block"
+              >
+                My Listings
+              </Link>
 
+              <Link
+                to="/chats"
+                className="text-xl hover:scale-110 transition"
+              >
+                💬
+              </Link>
 
-    <Link
-      to="/my-listings"
-      className="
-      hidden
-      text-sm
-      font-medium
-      text-ink-light
-      hover:text-leather
-      sm:block
-      "
-    >
-      My Listings
-    </Link>
+              <span className="hidden text-sm text-ink-light md:block">
+                Hi, {user?.name}
+              </span>
 
-    <Link
-  to="/chats"
-  className="text-xl hover:scale-110 transition"
->
-  💬
-</Link>
-
-
-    <span className="hidden text-sm text-ink-light md:block">
-      Hi, {user?.name}
-    </span>
-
-
-    <Button 
-      variant="outline" 
-      size="sm" 
-      onClick={handleLogout}
-    >
-      Logout
-    </Button>
-
-  </>
-): (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
             <>
               <Link to="/login">
                 <Button variant="secondary" size="sm">
                   Login
                 </Button>
               </Link>
+
               <Link to="/signup">
                 <Button variant="primary" size="sm">
                   Sign Up

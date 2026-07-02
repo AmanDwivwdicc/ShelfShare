@@ -22,6 +22,9 @@ export const booksAPI = {
 
 export const requestsAPI = {
 
+  getCount: () =>
+    api.get("/requests/count"),
+
   create: (bookId) =>
     api.post("/requests", { bookId }),
 

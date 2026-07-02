@@ -367,3 +367,26 @@ message:"Failed updating request"
 
 
 };
+
+export const getPendingCount = async (req, res) => {
+  try {
+
+    const count = await Request.countDocuments({
+      owner: req.user._id,
+      status: "pending"
+    });
+
+    res.json({
+      success: true,
+      count
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch notification count"
+    });
+
+  }
+};
