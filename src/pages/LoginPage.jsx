@@ -78,29 +78,6 @@ export default function LoginPage() {
           <p className="mt-2 text-ink-light">Sign in to your account</p>
         </div>
 
-        <div className="mb-6 rounded-xl border-2 border-dashed border-sage/40 bg-sage-light/50 p-4">
-          <p className="text-sm font-semibold text-sage">Demo Account</p>
-          <div className="mt-2 space-y-1 text-sm text-ink-light">
-            <p>
-              Email:{" "}
-              <span className="font-mono font-medium text-ink">{DEMO_EMAIL}</span>
-            </p>
-            <p>
-              Password:{" "}
-              <span className="font-mono font-medium text-ink">{DEMO_PASSWORD}</span>
-            </p>
-          </div>
-          <Button
-            variant="sage"
-            size="sm"
-            className="mt-3"
-            onClick={fillDemo}
-            type="button"
-          >
-            Use Demo Credentials
-          </Button>
-        </div>
-
         <form
           onSubmit={handleSubmit}
           className="rounded-xl border border-parchment bg-white p-8 shadow-sm"
