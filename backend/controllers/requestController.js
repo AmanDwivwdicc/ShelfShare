@@ -1,7 +1,6 @@
 import Book from "../models/Book.js";
 import Request from "../models/Request.js";
 import Conversation from "../models/Conversation.js";
-import { sendEmail } from "../utils/sendEmail.js";
 import User from "../models/User.js";
 
 // CREATE REQUEST
@@ -103,30 +102,30 @@ export const createRequest = async (req, res) => {
 
     ]);
 
-    try {
-      await sendEmail({
-        to: request.owner.email,
-        subject: "📚 New request on ShelfShare",
+    // try {
+    //   await sendEmail({
+    //     to: request.owner.email,
+    //     subject: "📚 New request on ShelfShare",
     
-        html: `
-          <h2>Hello ${request.owner.name},</h2>
+    //     html: `
+    //       <h2>Hello ${request.owner.name},</h2>
     
-          <p>You have received a new book request.</p>
+    //       <p>You have received a new book request.</p>
     
-          <h3>${request.book.title}</h3>
+    //       <h3>${request.book.title}</h3>
     
-          <p>Requester: ${request.requester.name}</p>
+    //       <p>Requester: ${request.requester.name}</p>
     
-          <br>
+    //       <br>
     
-          <a href="https://shelf-share-taupe.vercel.app/notifications">
-            Open ShelfShare
-          </a>
-        `,
-      });
-    } catch (err) {
-      console.error("Email failed:", err.message);
-    }
+    //       <a href="https://shelf-share-taupe.vercel.app/notifications">
+    //         Open ShelfShare
+    //       </a>
+    //     `,
+    //   });
+    // } catch (err) {
+    //   console.error("Email failed:", err.message);
+    // }
 
     res.status(201).json({
 
@@ -330,32 +329,32 @@ if(status==="accepted"){
 
   const requester = await User.findById(request.requester);
 
-try {
+// try {
 
-  await sendEmail({
+//   await sendEmail({
 
-    to: requester.email,
+//     to: requester.email,
 
-    subject: "🎉 Your request was accepted!",
+//     subject: "🎉 Your request was accepted!",
 
-    html: `
-      <h2>Great news!</h2>
+//     html: `
+//       <h2>Great news!</h2>
 
-      <p>Your request has been accepted.</p>
+//       <p>Your request has been accepted.</p>
 
-      <a href="https://shelf-share-taupe.vercel.app/chats">
-        Open Chat
-      </a>
-    `
+//       <a href="https://shelf-share-taupe.vercel.app/chats">
+//         Open Chat
+//       </a>
+//     `
 
-  });
+//   });
 
-}
-catch(err){
+// }
+// catch(err){
 
-  console.error("Email failed:",err.message);
+//   console.error("Email failed:",err.message);
 
-}
+// }
   
   
   
@@ -379,36 +378,36 @@ catch(err){
 
     const requester = await User.findById(request.requester);
   
-    try{
+    // try{
   
-      await sendEmail({
+    //   await sendEmail({
   
-        to: requester.email,
+    //     to: requester.email,
   
-        subject:"Book request rejected",
+    //     subject:"Book request rejected",
   
-        html:`
+    //     html:`
   
-        <h2>Request Declined</h2>
+    //     <h2>Request Declined</h2>
   
-        <p>Your request has been declined.</p>
+    //     <p>Your request has been declined.</p>
   
-        <a href="https://shelf-share-taupe.vercel.app/dashboard">
+    //     <a href="https://shelf-share-taupe.vercel.app/dashboard">
   
-        Browse more books
+    //     Browse more books
   
-        </a>
+    //     </a>
   
-        `
+    //     `
   
-      });
+    //   });
   
-    }
-    catch(err){
+    // }
+    // catch(err){
   
-      console.error("Email failed:",err.message);
+    //   console.error("Email failed:",err.message);
   
-    }
+    // }
   
   }
 
