@@ -3,6 +3,7 @@ import Request from "../models/Request.js";
 import Conversation from "../models/Conversation.js";
 import User from "../models/User.js";
 import { sendEmail } from "../utils/sendEmail.js";
+import { sendPushNotification } from "../utils/sendPushNotification.js";
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
   try {
@@ -125,6 +126,12 @@ export const createRequest = async (req, res) => {
       `
       
       });
+      await sendPushNotification(
+        request.owner._id,
+        "📚 New Book Request",
+        `${request.requester.name} requested "${request.book.title}"`,
+        "/notifications"
+      );
       
       }
       catch(err){
