@@ -59,3 +59,8 @@ export const conversationAPI = {
   api.get("/conversations")
   
   };
+
+  export const pushAPI = {
+    subscribe: (subscription) =>
+      api.post("/push/subscribe", subscription),
+  };

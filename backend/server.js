@@ -10,7 +10,7 @@ import requestRoutes from "./routes/requestRoutes.js";
 import seedDummyBooks from "./utils/seedDummyBooks.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
-
+import pushRoutes from "./routes/pushRoutes.js";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -30,6 +30,7 @@ app.use(
   "/api/conversations",
   conversationRoutes
   );
+app.use("/api/push", pushRoutes);
   
 app.use((req, res) => {
   res.status(404).json({ success: false, message: "Route not found" });

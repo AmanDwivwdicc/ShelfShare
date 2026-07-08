@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { authAPI } from "../api/services";
+import { registerForPushNotifications } from "../utils/push";
 
 const AuthContext = createContext(null);
 
@@ -32,6 +33,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
     setUser(data.user);
+    await registerForPushNotifications();
 
     return { success: true, message: data.message };
   };
@@ -42,6 +44,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem("token", data.token);
     localStorage.setItem("user", JSON.stringify(data.user));
     setUser(data.user);
+    await registerForPushNotifications();
 
     return { success: true, message: data.message };
   };
