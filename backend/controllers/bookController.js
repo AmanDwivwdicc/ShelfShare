@@ -18,7 +18,6 @@ const formatBook = (book) => ({
     ? {
         id: book.owner._id,
         name: book.owner.name,
-        email: book.owner.email,
       }
     : null,
   createdAt: book.createdAt,
@@ -27,7 +26,7 @@ const formatBook = (book) => ({
 export const getBooks = async (req, res) => {
   try {
     const books = await Book.find({ status: "available" })
-      .populate("owner", "name email")
+      .populate("owner", "name")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -48,7 +47,7 @@ export const getBookById = async (req, res) => {
   try {
     const book = await Book.findById(req.params.id).populate(
       "owner",
-      "name email"
+      "name"
     );
 
     if (!book) {
@@ -142,7 +141,7 @@ export const createBook = async (req, res) => {
       status: "available",
     });
 
-    await book.populate("owner", "name email");
+    await book.populate("owner", "name");
 
     res.status(201).json({
       success: true,
@@ -163,7 +162,7 @@ export const getMyBooks = async (req, res) => {
     const books = await Book.find({
       owner: req.user._id
     })
-    .populate("owner", "name email")
+    .populate("owner", "name")
     .sort({ createdAt: -1 });
 
 
