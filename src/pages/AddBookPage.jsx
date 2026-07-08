@@ -34,6 +34,8 @@ export default function AddBookPage() {
     title: "",
     author: "",
     genre: "",
+    bookAge: "",
+    condition: "",
     description: "",
     type: "exchange",
     price: "",
@@ -64,6 +66,10 @@ export default function AddBookPage() {
     if (!form.title.trim()) newErrors.title = "Title is required";
     if (!form.author.trim()) newErrors.author = "Author is required";
     if (!form.genre) newErrors.genre = "Please select a genre";
+    if (!form.bookAge)
+      newErrors.bookAge = "Please select the book age";
+    if (!form.condition)
+      newErrors.condition = "Please select the condition";
     if (!form.description.trim()) {
       newErrors.description = "Description is required";
     } else if (form.description.trim().length < 20) {
@@ -131,6 +137,8 @@ export default function AddBookPage() {
       formData.append("title", form.title.trim());
       formData.append("author", form.author.trim());
       formData.append("genre", form.genre);
+      formData.append("bookAge", form.bookAge);
+      formData.append("condition", form.condition);
       formData.append("description", form.description.trim());
       formData.append("type", form.type);
       if (form.type === "sell") {
@@ -264,6 +272,65 @@ export default function AddBookPage() {
             {errors.genre && (
               <p className="mt-1 text-sm text-red-600">{errors.genre}</p>
             )}
+          </div>
+
+          <div className="w-full">
+          <label className="mb-1.5 block text-sm font-medium text-ink-light">Book Age</label>
+
+<select
+    name="bookAge"
+    value={form.bookAge}
+    onChange={handleChange}
+>
+
+<option value="">Select</option>
+
+<option>Less than 6 months</option>
+
+<option>6 months - 1 year</option>
+
+<option>1 - 2 years</option>
+
+<option>2 - 5 years</option>
+
+<option>More than 5 years</option>
+
+</select>
+{errors.bookAge && (
+  <p className="mt-1 text-sm text-red-600">
+    {errors.bookAge}
+  </p>
+)}
+</div>
+
+<div className="w-full">
+<label>Condition</label>
+
+<select
+    name="condition"
+    value={form.condition}
+    onChange={handleChange}
+>
+
+<option value="">Select</option>
+
+<option>Like New</option>
+
+<option>Very Good</option>
+
+<option>Good</option>
+
+<option>Fair</option>
+
+<option>Poor</option>
+
+</select>
+{errors.condition && (
+  <p className="mt-1 text-sm text-red-600">
+    {errors.condition}
+  </p>
+)}
+
           </div>
 
           <div className="w-full">

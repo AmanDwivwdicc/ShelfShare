@@ -1,4 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import { AuthProvider } from "./context/AuthContext";
 import { BooksProvider } from "./context/BooksContext";
@@ -17,6 +22,20 @@ import NotificationsPage from "./pages/NotificationsPage";
 import ChatPage from "./pages/ChatPage";
 import ChatsPage from "./pages/ChatsPage";
 
+import { useAuth } from "./context/AuthContext";
+
+function HomeRedirect() {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) return null;
+
+  return isAuthenticated ? (
+    <Navigate to="/dashboard" replace />
+  ) : (
+    <LandingPage />
+  );
+}
+
 export default function App() {
 
   return (
@@ -30,10 +49,10 @@ export default function App() {
 
             {/* Public Routes */}
 
-            <Route 
-              path="/" 
-              element={<LandingPage />} 
-            />
+            <Route
+  path="/"
+  element={<HomeRedirect />}
+/>
 
             <Route 
               path="/login" 

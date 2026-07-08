@@ -9,6 +9,8 @@ const formatBook = (book) => ({
   title: book.title,
   author: book.author,
   genre: book.genre,
+  bookAge: book.bookAge,
+  condition: book.condition,
   description: book.description,
   type: book.type,
   price: book.price,
@@ -79,9 +81,26 @@ export const getBookById = async (req, res) => {
 
 export const createBook = async (req, res) => {
   try {
-    const { title, author, genre, description, type, price } = req.body;
+    const {
+      title,
+      author,
+      genre,
+      description,
+      type,
+      price,
+      bookAge,
+      condition,
+    } = req.body;
 
-    if (!title || !author || !genre || !description || !type) {
+    if (
+      !title ||
+      !author ||
+      !genre ||
+      !description ||
+      !type ||
+      !bookAge ||
+      !condition
+    ) {
       return res.status(400).json({
         success: false,
         message: "Please provide title, author, genre, description, and type",
@@ -134,6 +153,10 @@ export const createBook = async (req, res) => {
       author: author.trim(),
       genre: genre.trim(),
       description: description.trim(),
+
+      bookAge,
+      condition,
+
       type,
       price: type === "sell" ? parsedPrice : null,
       image: imageUrl,

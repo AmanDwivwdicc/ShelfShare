@@ -45,6 +45,15 @@ const bookSchema = new mongoose.Schema(
       enum: ["available", "pending", "sold", "exchanged"],
       default: "available",
     },
+    bookAge: {
+      type: String,
+      required: true,
+    },
+    
+    condition: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
