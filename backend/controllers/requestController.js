@@ -264,8 +264,9 @@ message:"Invalid status"
 
 
 
-const request =
-await Request.findById(req.params.id);
+const request = await Request.findById(req.params.id)
+  .populate("book", "title")
+  .populate("requester", "name email");
 
 
 
@@ -317,86 +318,64 @@ let conversation = null;
 
 // create ONE chat between two users
 
-if(status==="accepted"){
-
+if (status === "accepted") {
 
   const users = [
-  request.owner.toString(),
-  request.requester.toString()
+    request.owner.toString(),
+    request.requester._id.toString()
   ].sort();
-  
-  
-  
-  conversation =
-  await Conversation.findOne({
-  
-  users:{
-  $all:users,
-  $size:2
-  }
-  
+
+  conversation = await Conversation.findOne({
+    users: {
+      $all: users,
+      $size: 2
+    }
   });
 
-  const requester = await User.findById(request.requester);
+  if (!conversation) {
+    conversation = await Conversation.create({
+      users
+    });
+  }
 
-  try{
+  try {
 
     await sendEmail({
-    
-    to:requester.email,
-    
-    subject:"🎉 Your request has been accepted",
-    
-    html:`
-    
-    <h2>Your request has been accepted!</h2>
-    
-    <p>You can now chat with the owner.</p>
-    
-    <a href="https://shelf-share-taupe.vercel.app/chats">
-    
-    Open Chat
-    
-    </a>
-    
-    `
-    
-    });
-    
-    }
-    catch(err){
-    
-    console.log(err);
-    
-    }
-  
-  
-  
-  if(!conversation){
-  
-  
-  conversation =
-  await Conversation.create({
-  
-  users
-  
-  });
-  
-  
-  }
-  
-  
-  
-  }
-  if(status==="rejected"){
 
-    const requester = await User.findById(request.requester);
+      to: request.requester.email,
+
+      subject: "🎉 Your ShelfShare request has been accepted!",
+
+      html: `
+        <h2>🎉 Congratulations!</h2>
+
+        <p>Your request for <strong>${request.book.title}</strong> has been accepted.</p>
+
+        <p>You can now chat with the owner.</p>
+
+        <a href="https://shelf-share-taupe.vercel.app/chats">
+          Open Chat
+        </a>
+      `
+
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+
+}
+
+
+  if(status==="rejected"){
   
     try{
 
       await sendEmail({
       
-      to:requester.email,
+        to: request.requester.email,
       
       subject:"Book Request Rejected",
       
