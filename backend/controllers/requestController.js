@@ -84,22 +84,18 @@ export const createRequest = async (req, res) => {
 
 
     await request.populate([
-
       {
-        path:"book",
-        select:"title author image"
+        path: "book",
+        select: "title author image"
       },
-
       {
-        path:"requester",
-        select:"name email"
+        path: "requester",
+        select: "name"
       },
-
       {
-        path:"owner",
-        select:"name email"
+        path: "owner",
+        select: "name"
       }
-
     ]);
 
     try{

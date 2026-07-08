@@ -150,7 +150,6 @@ export default function BookDetailsPage() {
                   </div>
                   <div>
                     <p className="font-semibold text-ink">{book.owner.name}</p>
-                    <p className="text-sm text-ink-light">{book.owner.email}</p>
                   </div>
                 </div>
               </div>

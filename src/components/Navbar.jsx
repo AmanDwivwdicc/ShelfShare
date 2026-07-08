@@ -25,7 +25,10 @@ export default function Navbar({
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-2">
+      <Link
+  to={isAuthenticated ? "/dashboard" : "/"}
+  className="flex items-center gap-2"
+>
           <span className="text-2xl">📚</span>
           <span className="font-serif text-xl font-bold text-ink">
             Shelf<span className="text-leather">Share</span>
