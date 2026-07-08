@@ -44,8 +44,8 @@ const { deleteBook } = useBooks();
           {book.title}
         </h3>
         <p className="text-sm text-ink-light">by {book.author}</p>
-        <p className="text-sm text-ink-light">📅 {book.bookAge}</p>
-        <p className="text-sm text-ink-light">⭐ {book.condition}</p>
+        <p className="text-sm text-ink-light">Book Age:📅 {book.bookAge}</p>
+        <p className="text-sm text-ink-light">Condition:⭐ {book.condition}</p>
 
         {!isExchange && book.price != null && (
           <p className="mt-1 text-xl font-bold text-leather">
