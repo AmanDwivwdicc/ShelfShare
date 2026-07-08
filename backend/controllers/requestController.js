@@ -103,26 +103,30 @@ export const createRequest = async (req, res) => {
 
     ]);
 
-    await sendEmail({
-      to: request.owner.email,
-      subject: "📚 New request on ShelfShare",
+    try {
+      await sendEmail({
+        to: request.owner.email,
+        subject: "📚 New request on ShelfShare",
     
-      html: `
-        <h2>Hello ${request.owner.name},</h2>
+        html: `
+          <h2>Hello ${request.owner.name},</h2>
     
-        <p>Someone has requested your book:</p>
+          <p>You have received a new book request.</p>
     
-        <h3>${request.book.title}</h3>
+          <h3>${request.book.title}</h3>
     
-        <p>Requester: ${request.requester.name}</p>
+          <p>Requester: ${request.requester.name}</p>
     
-        <br>
+          <br>
     
-        <a href="https://shelf-share-taupe.vercel.app/notifications">
-          Open ShelfShare
-        </a>
-      `,
-    });
+          <a href="https://shelf-share-taupe.vercel.app/notifications">
+            Open ShelfShare
+          </a>
+        `,
+      });
+    } catch (err) {
+      console.error("Email failed:", err.message);
+    }
 
     res.status(201).json({
 
@@ -326,23 +330,32 @@ if(status==="accepted"){
 
   const requester = await User.findById(request.requester);
 
-await sendEmail({
+try {
 
-  to: requester.email,
+  await sendEmail({
 
-  subject: "🎉 Your request was accepted!",
+    to: requester.email,
 
-  html: `
-    <h2>Great news!</h2>
+    subject: "🎉 Your request was accepted!",
 
-    <p>Your request has been accepted.</p>
+    html: `
+      <h2>Great news!</h2>
 
-    <a href="https://shelf-share-taupe.vercel.app/chats">
-      Open Chat
-    </a>
-  `
+      <p>Your request has been accepted.</p>
 
-});
+      <a href="https://shelf-share-taupe.vercel.app/chats">
+        Open Chat
+      </a>
+    `
+
+  });
+
+}
+catch(err){
+
+  console.error("Email failed:",err.message);
+
+}
   
   
   
@@ -365,28 +378,39 @@ await sendEmail({
   if(status==="rejected"){
 
     const requester = await User.findById(request.requester);
-    
-    await sendEmail({
-    
-    to: requester.email,
-    
-    subject:"Book request rejected",
-    
-    html:`
-    
-    <p>Your request has been declined.</p>
-    
-    <a href="https://shelf-share-taupe.vercel.app/dashboard">
-    
-    Browse more books
-    
-    </a>
-    
-    `
-    
-    });
-    
+  
+    try{
+  
+      await sendEmail({
+  
+        to: requester.email,
+  
+        subject:"Book request rejected",
+  
+        html:`
+  
+        <h2>Request Declined</h2>
+  
+        <p>Your request has been declined.</p>
+  
+        <a href="https://shelf-share-taupe.vercel.app/dashboard">
+  
+        Browse more books
+  
+        </a>
+  
+        `
+  
+      });
+  
     }
+    catch(err){
+  
+      console.error("Email failed:",err.message);
+  
+    }
+  
+  }
 
 
 
