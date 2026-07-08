@@ -1,29 +1,28 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // MUST be false for port 587
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+export const sendEmail = async ({
+  to,
+  subject,
+  html,
+}) => {
 
-export const sendEmail = async ({ to, subject, html }) => {
-  try {
-    const info = await transporter.sendMail({
-      from: `"ShelfShare" <${process.env.EMAIL_USER}>`,
-      to,
-      subject,
-      html,
-    });
+  const { error } = await resend.emails.send({
 
-    console.log("Email sent:", info.response);
+    from: "ShelfShare <onboarding@resend.dev>",
 
-  } catch (err) {
-    console.error(err);
-    throw err;
+    to,
+
+    subject,
+
+    html,
+
+  });
+
+  if (error) {
+    console.error(error);
+    throw error;
   }
+
 };
