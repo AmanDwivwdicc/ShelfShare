@@ -1,5 +1,6 @@
 import Message from "../models/Message.js";
 import Conversation from "../models/Conversation.js";
+import { sendPushNotification } from "../utils/sendPushNotification.js";
 
 export const getMessages=async(req,res)=>{
 
@@ -75,6 +76,24 @@ sender:req.user._id,
 text:req.body.text
 
 });
+
+const conversation = await Conversation.findById(req.params.id)
+  .populate("users", "name");
+
+const receiver = conversation.users.find(
+  (user) => user._id.toString() !== req.user._id.toString()
+);
+
+if (receiver) {
+  await sendPushNotification(
+    receiver._id,
+    "💬 New message on ShelfShare",
+    `${req.user.name}: ${req.body.text.substring(0, 60)}${
+  req.body.text.length > 60 ? "..." : ""
+}`,
+    `/chat/${conversation._id}`
+  );
+}
 
 
 
