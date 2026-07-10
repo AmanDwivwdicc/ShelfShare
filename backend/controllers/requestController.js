@@ -412,8 +412,8 @@ if (status === "accepted") {
     //   }
     await sendPushNotification(
       request.requester._id,
-      "❌ Request Rejected",
-      `Your request for "${request.book.title}" was declined.`,
+      "📚 Book Unavailable",
+      `Your request for "${request.book.title}" couldn't be accepted. Explore more books on ShelfShare!`,
       "/dashboard"
     );
   
