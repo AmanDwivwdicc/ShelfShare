@@ -1,20 +1,14 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-
-  family: 4, // Force IPv4
+  host: process.env.EMAIL_HOST,
+  port: Number(process.env.EMAIL_PORT),
+  secure: false, // true only for port 465
 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
 });
 
 export const sendEmailNodemailer = async ({
@@ -30,12 +24,14 @@ export const sendEmailNodemailer = async ({
       html,
     });
 
-    console.log("Email sent:", info.response);
+    console.log("✅ Email sent:", info.messageId);
     return true;
 
   } catch (err) {
-    console.error("Nodemailer Error:", err.message);
+
+    console.error("❌ Email Error:", err);
+
     return false;
+
   }
 };
-
