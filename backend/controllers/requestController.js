@@ -281,21 +281,17 @@ message:"Request not found"
 
 // only owner can decide
 
-if(
-request.owner.toString()
-!==
-req.user._id.toString()
-){
+console.log("Logged in user:", req.user._id.toString());
+console.log("Request owner :", request.owner.toString());
+console.log("Request id    :", request._id.toString());
 
-
-return res.status(403).json({
-
-success:false,
-message:"Not authorized"
-
-});
-
-
+if (
+  request.owner.toString() !== req.user._id.toString()
+) {
+  return res.status(403).json({
+    success: false,
+    message: "Not authorized"
+  });
 }
 
 
