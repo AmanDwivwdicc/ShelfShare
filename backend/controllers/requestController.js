@@ -286,7 +286,7 @@ console.log("Request owner :", request.owner.toString());
 console.log("Request id    :", request._id.toString());
 
 if (
-  request.owner.toString() !== req.user._id.toString()
+  request.owner._id.toString() !== req.user._id.toString()
 ) {
   return res.status(403).json({
     success: false,
@@ -312,10 +312,10 @@ let conversation = null;
 if (status === "accepted") {
 
   const users = [
-    request.owner.toString(),
+    request.owner._id.toString(),
     request.requester._id.toString()
   ].sort();
-
+  
   conversation = await Conversation.findOne({
     users: {
       $all: users,
