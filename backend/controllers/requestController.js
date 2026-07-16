@@ -2,7 +2,7 @@ import Book from "../models/Book.js";
 import Request from "../models/Request.js";
 import Conversation from "../models/Conversation.js";
 import User from "../models/User.js";
-import { sendEmail } from "../utils/sendEmail.js";
+import { sendEmailNodemailer as sendEmail } from "../utils/sendEmailNodemailer.js";
 import { sendPushNotification } from "../utils/sendPushNotification.js";
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
@@ -99,40 +99,41 @@ export const createRequest = async (req, res) => {
       }
     ]);
 
-    // try{
+    try{
 
-    //   await sendEmail({
+      await sendEmail({
       
-    //   to:request.owner.email,
+      to:request.owner.email,
       
-    //   subject:"📚 New request on ShelfShare",
+      subject:"📚 New request on ShelfShare",
       
-    //   html:`
+      html:`
       
-    //   <h2>Hello ${request.owner.name}</h2>
+      <h2>Hello ${request.owner.name}</h2>
       
-    //   <p>${request.requester.name} has requested your book.</p>
+      <p>${request.requester.name} has requested your book.</p>
       
-    //   <h3>${request.book.title}</h3>
+      <h3>${request.book.title}</h3>
       
-    //   <br>
+      <br>
       
-    //   <a href="https://shelf-share-taupe.vercel.app/notifications">
+      <a href="https://shelf-share-taupe.vercel.app/notifications">
       
-    //   View Request
+      View Request
       
-    //   </a>
+      </a>
       
-    //   `
+      `
       
-    //   });
+      });
       
-    //   }
-    //   catch(err){
+      }
+      catch(err){
       
-    //   console.log(err);
+      console.log(err);
       
-    //   }
+      }
+
     await sendPushNotification(
       request.owner._id,
       "📚 New Book Request",
@@ -347,69 +348,69 @@ if (status === "accepted") {
     "/chats"
   );
 
-  // try {
+  try {
 
-  //   await sendEmail({
+    await sendEmail({
 
-  //     to: request.requester.email,
+      to: request.requester.email,
 
-  //     subject: "🎉 Your ShelfShare request has been accepted!",
+      subject: "🎉 Your ShelfShare request has been accepted!",
 
-  //     html: `
-  //       <h2>🎉 Congratulations!</h2>
+      html: `
+        <h2>🎉 Congratulations!</h2>
 
-  //       <p>Your request for <strong>${request.book.title}</strong> has been accepted.</p>
+        <p>Your request for <strong>${request.book.title}</strong> has been accepted.</p>
 
-  //       <p>You can now chat with the owner.</p>
+        <p>You can now chat with the owner.</p>
 
-  //       <a href="https://shelf-share-taupe.vercel.app/chats">
-  //         Open Chat
-  //       </a>
-  //     `
+        <a href="https://shelf-share-taupe.vercel.app/chats">
+          Open Chat
+        </a>
+      `
 
-  //   });
+    });
 
-  // } catch (err) {
+  } catch (err) {
 
-  //   console.error(err);
+    console.error(err);
 
-  // }
+  }
 
 }
 
 
   if(status==="rejected"){
   
-    // try{
+    try{
 
-    //   await sendEmail({
+      await sendEmail({
       
-    //     to: request.requester.email,
+        to: request.requester.email,
       
-    //   subject:"Book Request Rejected",
+      subject:"Book Request Rejected",
       
-    //   html:`
+      html:`
       
-    //   <h2>Your request was declined.</h2>
+      <h2>Your request was declined.</h2>
       
-    //   <p>Don't worry, there are many more books waiting for you.</p>
+      <p>Don't worry, there are many more books waiting for you.</p>
       
-    //   <a href="https://shelf-share-taupe.vercel.app/dashboard">
+      <a href="https://shelf-share-taupe.vercel.app/dashboard">
       
-    //   Browse Books
+      Browse Books
       
-    //   </a>
+      </a>
       
-    //   `
+      `
       
-    //   });
+      });
       
-    //   }
-    //   catch(err){
+      }
+      catch(err){
       
-    //   console.log(err);
+      console.log(err);
       
-    //   }
+      }
     await sendPushNotification(
       request.requester._id,
       "📚 Book Unavailable",
