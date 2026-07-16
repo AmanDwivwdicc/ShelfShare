@@ -1,7 +1,6 @@
 import Book from "../models/Book.js";
 import Request from "../models/Request.js";
 import Conversation from "../models/Conversation.js";
-import User from "../models/User.js";
 import { sendEmailNodemailer as sendEmail } from "../utils/sendEmailNodemailer.js";
 import { sendPushNotification } from "../utils/sendPushNotification.js";
 // CREATE REQUEST
@@ -95,13 +94,11 @@ export const createRequest = async (req, res) => {
       },
       {
         path: "owner",
-        select: "name"
+        select: "name email"
       }
     ]);
 
-    try{
-
-      await sendEmail({
+      sendEmail({
       
       to:request.owner.email,
       
@@ -125,21 +122,15 @@ export const createRequest = async (req, res) => {
       
       `
       
-      });
+      }).catch(console.error);
       
-      }
-      catch(err){
-      
-      console.log(err);
-      
-      }
-
-    await sendPushNotification(
+  
+    sendPushNotification(
       request.owner._id,
       "📚 New Book Request",
       `${request.requester.name} requested "${request.book.title}"`,
       "/notifications"
-    );
+    ).catch(console.error);
 
     res.status(201).json({
 
@@ -270,8 +261,8 @@ message:"Invalid status"
 
 const request = await Request.findById(req.params.id)
   .populate("book", "title")
-  .populate("requester", "name email");
-
+  .populate("requester", "name email")
+  .populate("owner","name email");
 
 
 if(!request){
@@ -341,16 +332,15 @@ if (status === "accepted") {
       users
     });
   }
-  await sendPushNotification(
+  sendPushNotification(
     request.requester._id,
     "🎉 Request Accepted",
     `Your request for "${request.book.title}" has been accepted!`,
     "/chats"
-  );
+  ).catch(console.error);
 
-  try {
 
-    await sendEmail({
+    sendEmail({
 
       to: request.requester.email,
 
@@ -368,22 +358,15 @@ if (status === "accepted") {
         </a>
       `
 
-    });
+    }).catch(console.error);
 
-  } catch (err) {
-
-    console.error(err);
-
-  }
 
 }
 
 
   if(status==="rejected"){
   
-    try{
-
-      await sendEmail({
+      sendEmail({
       
         to: request.requester.email,
       
@@ -403,20 +386,14 @@ if (status === "accepted") {
       
       `
       
-      });
+      }).catch(console.error);
       
-      }
-      catch(err){
-      
-      console.log(err);
-      
-      }
-    await sendPushNotification(
+    sendPushNotification(
       request.requester._id,
       "📚 Book Unavailable",
       `Your request for "${request.book.title}" couldn't be accepted. Explore more books on ShelfShare!`,
       "/dashboard"
-    );
+    ).catch(console.error);
   
   }
 
